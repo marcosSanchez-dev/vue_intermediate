@@ -6,4 +6,10 @@
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+div {
+  background: deeppink;
+  padding: 50%;
+  color: white;
+}
+</style>
