@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { RouterLink } from "vue-router";
+import type { RouterLinks } from "@/router/link-routes";
 
 // *** Sin typescript ***
-
 // const props = defineProps({
 //   title: {
 //     type: String,
@@ -12,13 +11,13 @@ import { RouterLink } from "vue-router";
 // });
 
 // *** Pocas props ***
-
 // const props = defineProps<{ title?: string }>();
 
 // *** Muchas props ***
 
 interface Props {
   title?: string;
+  links: RouterLinks[];
 }
 
 const props = defineProps<Props>();
@@ -30,9 +29,18 @@ const props = defineProps<Props>();
 
     <span>{{ props.title || "sin prop" }}</span>
 
+    <!-- ! SIN uso de props -->
+    <!-- 
     <RouterLink to="/">Inicio</RouterLink>
     <RouterLink to="/about">About</RouterLink>
     <RouterLink to="/characters">Characters</RouterLink>
+     -->
+
+    <!-- ! CON uso de props -->
+
+    <RouterLink v-for="link of props.links" :key="link.path" :to="link.path">{{
+      link.name
+    }}</RouterLink>
   </nav>
 </template>
 

@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router";
 import NavBar from "@/shared/components/NavBar.vue";
+import { routeLinks } from "./router/link-routes";
 </script>
 
 <template>
   <div class="wrapper">
     <header>
-      <NavBar title="Soy un prop desde el padre" links="" />
+      <NavBar title="Soy un prop desde el padre" :links="routeLinks" />
     </header>
 
     <main>
