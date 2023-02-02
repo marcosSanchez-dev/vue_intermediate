@@ -21,6 +21,8 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+
+console.log("props object: ", JSON.stringify(props));
 </script>
 
 <template>
@@ -39,7 +41,7 @@ const props = defineProps<Props>();
     <!-- ! CON uso de props -->
 
     <RouterLink v-for="link of props.links" :key="link.path" :to="link.path">{{
-      link.name
+      link.title
     }}</RouterLink>
   </nav>
 </template>
@@ -62,5 +64,6 @@ span {
 }
 a {
   margin-right: 45px;
+  min-width: max-content;
 }
 </style>
