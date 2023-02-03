@@ -9,7 +9,8 @@
 <style scoped>
 div {
   background: aqua;
-  padding: 50%;
+  padding: 25%;
   color: white;
+  text-align: center;
 }
 </style>
