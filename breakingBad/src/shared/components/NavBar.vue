@@ -18,18 +18,33 @@ import type { RouterLinks } from "@/router/link-routes";
 interface Props {
   title?: string;
   links: RouterLinks[];
+  showIcon?: boolean;
 }
 
-const props = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {
+  showIcon: true,
+  /*
+    El valor por default de los 'links' es un array vacio y hay que declararlo de esta forma, 
+    aunque en este caso es obligatorio pasarlo en props, segun lo declarado en la 'interface'
+*/
+  links: () => [],
+});
 
 console.log("props object: ", JSON.stringify(props));
 </script>
 
 <template>
   <nav>
-    <img src="@/assets/logo.svg" alt="Vue logo" height="25" width="25" />
+    <img
+      v-if="props.showIcon"
+      src="@/assets/logo.svg"
+      alt="Vue logo"
+      height="25"
+      width="25"
+    />
 
-    <span>{{ props.title || "sin prop" }}</span>
+    <!-- <span>{{ props.title || "valor por defecto sin prop" }}</span> -->
+    <span v-if="props.title">{{ props.title }}</span>
 
     <!-- ! SIN uso de props -->
     <!-- 
@@ -54,6 +69,8 @@ nav {
   margin-top: 10px;
   text-align: center;
   width: 10%;
+  border: 1.5px dashed white;
+  min-width: max-content;
 }
 img {
   margin-right: 5px;

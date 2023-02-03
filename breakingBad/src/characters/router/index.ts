@@ -10,8 +10,23 @@ export const characterRoute: RouteRecordRaw = {
   name: "characters",
   redirect: "/characters/list",
   children: [
-    { path: "by/id", name: "character-id", component: CharacterId },
-    { path: "list", name: "character-list", component: CharacterList },
-    { path: "search", name: "character-seacrh", component: CharacterSearch },
+    {
+      path: "by/id",
+      name: "character-id",
+      props: { title: "Por ID" },
+      component: CharacterId,
+    },
+    {
+      path: "list",
+      name: "character-list",
+      props: { title: "por Lista" },
+      component: CharacterList,
+    },
+    {
+      path: "search",
+      name: "character-seacrh",
+      props: { title: "Busqueda" },
+      component: CharacterSearch,
+    },
   ],
 };
