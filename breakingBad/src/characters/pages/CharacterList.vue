@@ -8,6 +8,7 @@ const props = defineProps<{ visible: boolean; title: string }>();
 
 <template>
   <div class="child-wrapper">
+    <!-- ! Este prop viene de la URL y se especifican en el router -->
     <h1>{{ props.title || "no hay props.title" }}</h1>
     <CardList />
   </div>

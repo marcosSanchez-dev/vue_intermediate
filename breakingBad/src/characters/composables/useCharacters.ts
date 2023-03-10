@@ -9,11 +9,11 @@ const hasError = ref<boolean>(false);
 const errorMessage = ref<string>("");
 
 export const useCharacters = () => {
-  console.log("entre a useCharacters");
+  // console.log("entre a useCharacters");
   onMounted(async () => await loadCharacters());
 
   const loadCharacters = async () => {
-    console.log("entre al async");
+    // console.log("entre al async");
     if (characters.value.length > 0) return;
 
     isLoading.value = true;
@@ -46,7 +46,7 @@ export const useCharacters = () => {
   }
   */
 
-  console.log("Hola mundo");
+  // console.log("Hola mundo");
 
   return { characters, isLoading, hasError, errorMessage };
 };

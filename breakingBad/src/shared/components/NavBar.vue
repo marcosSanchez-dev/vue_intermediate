@@ -30,7 +30,7 @@ const props = withDefaults(defineProps<Props>(), {
   links: () => [],
 });
 
-console.log("props object: ", JSON.stringify(props));
+// console.log("props object: ", JSON.stringify(props));
 </script>
 
 <template>

@@ -7,7 +7,7 @@ import { routeLinks } from "./router/link-routes";
 <template>
   <div class="wrapper">
     <header>
-      <NavBar title="Soy un prop desde el padre" :links="routeLinks" />
+      <NavBar title="Soy un prop desde el padre App.vue" :links="routeLinks" />
     </header>
 
     <main>
