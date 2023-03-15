@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import breakingBadApi from "@/api/breakingBadApi";
 // import { ref } from "vue";
+import CharacterCard from "@/characters/components/CharacterCard.vue";
 import type { Character, Result } from "../interfaces/character";
 
 import { useQuery } from "@tanstack/vue-query";
@@ -21,7 +22,7 @@ const getCharactersSlow = async (): Promise<Character[]> => {
     setTimeout(async () => {
       const { data } = await breakingBadApi.get<Result>("/character");
       resolve(data.results);
-    }, 3000);
+    }, 2000);
   });
 };
 
@@ -42,11 +43,13 @@ const {
     <h2 v-if="isError">{{ error }}</h2>
     <div v-else>
       <h1>CardList</h1>
-      <ul>
-        <li v-for="{ id, name } of characters" :key="id">
-          {{ name }}
-        </li>
-      </ul>
+      <div class="card-list">
+        <CharacterCard
+          v-for="character of characters"
+          :key="character.id"
+          :character="character"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -57,5 +60,11 @@ const {
 }
 .loading {
   background: fuchsia;
+}
+
+.card-lis {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 </style>
