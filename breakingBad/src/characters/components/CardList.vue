@@ -21,7 +21,9 @@ const getCharactersSlow = async (): Promise<Character[]> => {
   return new Promise((resolve) => {
     setTimeout(async () => {
       const { data } = await breakingBadApi.get<Result>("/character");
-      resolve(data.results);
+      resolve(
+        data.results.filter((personaje) => ![3, 4, 7].includes(personaje.id))
+      );
     }, 2000);
   });
 };
