@@ -5,6 +5,9 @@ import { VueQueryPlugin } from "@tanstack/vue-query";
 
 import "./assets/main.css";
 
+// ! Solo fue necesario importar el store para que este fuera creado de forma global en la app
+import "@/store/characters.store";
+
 const app = createApp(App);
 VueQueryPlugin.install(app, {
   queryClientConfig: {

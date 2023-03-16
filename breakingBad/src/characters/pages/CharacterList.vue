@@ -3,12 +3,14 @@ import CardList from "@/characters/components/CardList.vue";
 import { useQuery } from "@tanstack/vue-query";
 import type { Character, Result } from "../interfaces/character";
 import breakingBadApi from "@/api/breakingBadApi";
+import characterStore from "@/store/characters.store";
 
 const props = defineProps<{ visible: boolean; title: string }>();
 
 // console.log("characterList props: ", props);
 
 // 3- Tanstack query
+/*
 const getCharactersSlow = async (): Promise<Character[]> => {
   return new Promise((resolve) => {
     setTimeout(async () => {
@@ -26,16 +28,21 @@ const {
   isError,
   error,
 } = useQuery(["characters"], getCharactersSlow);
+*/
 </script>
 
 <template>
-  <h1 v-if="isLoading" class="loading">Cargando...</h1>
-  <h2 v-if="isError">{{ error }}</h2>
+  <h1 v-if="characterStore.characters.isLoading" class="loading">
+    Cargando...
+  </h1>
+  <h2 v-if="characterStore.characters.hasError">
+    {{ characterStore.characters.errorMessage }}
+  </h2>
   <template v-else>
     <div class="child-wrapper">
       <!-- ! Este prop viene de la URL y se especifican en el router -->
       <h1>{{ props.title || "no hay props.title" }}</h1>
-      <CardList :characters="characters || []" />
+      <CardList :characters="characterStore.characters.list" />
     </div>
   </template>
 </template>
