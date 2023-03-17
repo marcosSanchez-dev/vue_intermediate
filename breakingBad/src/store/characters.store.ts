@@ -29,10 +29,19 @@ const characterStore = reactive<Store>({
   },
 
   //Metodos
-  startLoadingCharacters() {
-    console.log("Hola soy el store");
+  startLoadingCharacters() {},
+  loadedCharacters(data) {
+    const filteredCharacters = data.filter(
+      (personaje) => ![3, 4, 7].includes(personaje.id)
+    );
+    this.characters = {
+      list: filteredCharacters,
+      count: filteredCharacters.length,
+      isLoading: false,
+      hasError: false,
+      errorMessage: null,
+    };
   },
-  loadedCharacters(data) {},
   loadCharactersFailed(error) {},
 });
 
