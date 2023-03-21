@@ -1,5 +1,6 @@
 import breakingBadApi from "@/api/breakingBadApi";
 import type { Character, Result } from "@/characters/interfaces/character";
+import axios from "axios";
 import { reactive } from "vue";
 
 interface Store {
@@ -31,8 +32,12 @@ const characterStore = reactive<Store>({
 
   //Metodos
   async startLoadingCharacters() {
-    const { data } = await breakingBadApi.get<Result>("/character");
-    this.loadedCharacters(data.results);
+    try {
+      const { data } = await breakingBadApi.get<Result>("/character");
+      this.loadedCharacters(data.results);
+    } catch (error) {
+      this.loadCharactersFailed(error);
+    }
   },
   loadedCharacters(data) {
     const filteredCharacters = data.filter(
@@ -46,7 +51,28 @@ const characterStore = reactive<Store>({
       errorMessage: null,
     };
   },
-  loadCharactersFailed(error) {},
+  loadCharactersFailed(error) {
+    if (axios.isAxiosError(error)) {
+      console.log("axios error: ", error.response);
+      this.characters = {
+        list: [],
+        count: 0,
+        isLoading: false,
+        hasError: true,
+        errorMessage: error,
+      };
+      return;
+    }
+    console.log("error: ", JSON.stringify(error));
+
+    // this.characters = {
+    //   list: [],
+    //   count: 0,
+    //   isLoading: false,
+    //   hasError: true,
+    //   errorMessage: JSON.stringify(error),
+    // };
+  },
 });
 
 characterStore.startLoadingCharacters();

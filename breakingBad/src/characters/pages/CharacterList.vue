@@ -41,7 +41,7 @@ const { data, isLoading } = useQuery(["characters"], getCharactersCache, {
   <h1 v-if="characterStore.characters.isLoading" class="loading">
     Cargando...
   </h1>
-  <h2 v-if="characterStore.characters.hasError">
+  <h2 v-else-if="characterStore.characters.hasError">
     {{ characterStore.characters.errorMessage }}
   </h2>
   <template v-else>
@@ -59,5 +59,10 @@ const { data, isLoading } = useQuery(["characters"], getCharactersCache, {
   padding: 5rem;
   color: white;
   min-width: max-content;
+}
+
+h2 {
+  color: red;
+  font-size: 3rem;
 }
 </style>
