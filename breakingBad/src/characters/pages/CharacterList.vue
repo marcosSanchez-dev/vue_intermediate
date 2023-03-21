@@ -11,12 +11,14 @@ const props = defineProps<{ visible: boolean; title: string }>();
 
 // 3- Tanstack query
 
+// ! ": Promise<Character[]>" regresa una promesa de tipo "Character[]"
 const getCharactersCache = async (): Promise<Character[]> => {
-  if (characterStore.characters.count > 0) {
-    return characterStore.characters.list;
-  }
   return new Promise((resolve) => {
     setTimeout(async () => {
+      if (characterStore.characters.count > 0) {
+        resolve(characterStore.characters.list);
+        return;
+      }
       const { data } = await breakingBadApi.get<Result>("/character");
       resolve(data.results);
     }, 2000);
@@ -28,6 +30,9 @@ const { data, isLoading } = useQuery(["characters"], getCharactersCache, {
   // 2. La "data" es de tipo Character[] ya que viene especificado el tipado en la funcion getCharactersCache()
   onSuccess(data) {
     characterStore.loadedCharacters(data);
+  },
+  onError(error) {
+    console.log("error: " + error);
   },
 });
 </script>

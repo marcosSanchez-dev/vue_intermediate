@@ -1,4 +1,5 @@
-import type { Character } from "@/characters/interfaces/character";
+import breakingBadApi from "@/api/breakingBadApi";
+import type { Character, Result } from "@/characters/interfaces/character";
 import { reactive } from "vue";
 
 interface Store {
@@ -29,7 +30,10 @@ const characterStore = reactive<Store>({
   },
 
   //Metodos
-  startLoadingCharacters() {},
+  async startLoadingCharacters() {
+    const { data } = await breakingBadApi.get<Result>("/character");
+    this.loadedCharacters(data.results);
+  },
   loadedCharacters(data) {
     const filteredCharacters = data.filter(
       (personaje) => ![3, 4, 7].includes(personaje.id)
