@@ -34,7 +34,7 @@ const routeLinks: RouterLinks[] = characterRoute
 <style scoped>
 .layout-wrapper {
   background: darkgray;
-  padding: 25%;
+  padding: 5%;
   color: white;
 }
 </style>

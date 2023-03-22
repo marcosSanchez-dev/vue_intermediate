@@ -36,7 +36,7 @@ const props = defineProps<{ characters: Character[] }>();
 
 <style scoped>
 .card-list__wrapper {
-  background: goldenrod;
+  background: dimgray;
 }
 .loading {
   background: fuchsia;

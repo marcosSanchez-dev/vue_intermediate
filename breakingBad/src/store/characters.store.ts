@@ -17,7 +17,7 @@ interface Store {
   //! Estoy declarando este metodo y le indico a TS que no me regresa nada
   startLoadingCharacters: () => void;
   loadedCharacters: (data: Character[]) => void;
-  loadCharactersFailed: (error: string) => void;
+  loadCharactersFailed: (error: any) => void;
 }
 
 //* Initial State
@@ -53,7 +53,6 @@ const characterStore = reactive<Store>({
   },
   loadCharactersFailed(error) {
     if (axios.isAxiosError(error)) {
-      console.log("axios error: ", error.response);
       this.characters = {
         list: [],
         count: 0,
@@ -64,14 +63,6 @@ const characterStore = reactive<Store>({
       return;
     }
     console.log("error: ", JSON.stringify(error));
-
-    // this.characters = {
-    //   list: [],
-    //   count: 0,
-    //   isLoading: false,
-    //   hasError: true,
-    //   errorMessage: JSON.stringify(error),
-    // };
   },
 });
 
