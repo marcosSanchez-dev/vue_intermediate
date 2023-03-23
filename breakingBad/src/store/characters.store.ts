@@ -9,15 +9,30 @@ interface Store {
     count: number;
     isLoading: boolean;
     hasError: boolean;
-    errorMessage: string | null;
+    errorMessage: string | any;
   };
 
-  //Metodos
+  ids: {
+    list: {
+      // * estoy especificando que en la lista habrá un arreglo de " id's ". Osea muchos id's
+      [id: string]: Character;
+    };
+    isLoading: boolean;
+    hasError: boolean;
+    errorMessage: string | any;
+  };
+
+  //Metodos de characters
 
   //! Estoy declarando este metodo y le indico a TS que no me regresa nada
   startLoadingCharacters: () => void;
   loadedCharacters: (data: Character[]) => void;
   loadCharactersFailed: (error: any) => void;
+
+  //Metodos por id's
+  startLoadingCharacter: () => void;
+  checkIdInStore: (id: string) => boolean;
+  loadedCharacter: (character: Character) => void;
 }
 
 //* Initial State
@@ -30,7 +45,14 @@ const characterStore = reactive<Store>({
     errorMessage: null,
   },
 
-  //Metodos
+  ids: {
+    list: {},
+    isLoading: false,
+    hasError: false,
+    errorMessage: "",
+  },
+
+  //Metodos  de characters
   async startLoadingCharacters() {
     try {
       const { data } = await breakingBadApi.get<Result>("/character");
@@ -63,6 +85,23 @@ const characterStore = reactive<Store>({
       return;
     }
     console.log("error: ", JSON.stringify(error));
+  },
+
+  //Metodos por id
+  startLoadingCharacter() {
+    this.ids = {
+      ...this.ids,
+      isLoading: true,
+      hasError: false,
+      errorMessage: null,
+    };
+  },
+  checkIdInStore(id) {
+    return !!this.ids.list[id];
+  },
+  loadedCharacter(character) {
+    this.ids.isLoading = false;
+    this.ids.list[character.id] = character;
   },
 });
 
