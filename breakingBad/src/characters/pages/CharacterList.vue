@@ -1,54 +1,23 @@
 <script setup lang="ts">
 import CardList from "@/characters/components/CardList.vue";
-import { useQuery } from "@tanstack/vue-query";
-import type { Character, Result } from "../interfaces/character";
-import breakingBadApi from "@/api/breakingBadApi";
-import characterStore from "@/store/characters.store";
+import useCharacters from "../composables/useCharacters";
 
 const props = defineProps<{ visible: boolean; title: string }>();
 
-// console.log("characterList props: ", props);
-
-// 3- Tanstack query
-
-// ! ": Promise<Character[]>" regresa una promesa de tipo "Character[]"
-const getCharactersCache = async (): Promise<Character[]> => {
-  return new Promise((resolve) => {
-    setTimeout(async () => {
-      if (characterStore.characters.count > 0) {
-        resolve(characterStore.characters.list);
-        return;
-      }
-      const { data } = await breakingBadApi.get<Result>("/character");
-      resolve(data.results);
-    }, 2000);
-  });
-};
-
-const { data, isLoading } = useQuery(["characters"], getCharactersCache, {
-  // 1. Lo que resuelva en mi funcion getCharactersCache() es lo que obtendra como parametro la funcion onSuccess()
-  // 2. La "data" es de tipo Character[] ya que viene especificado el tipado en la funcion getCharactersCache()
-  onSuccess(data) {
-    characterStore.loadedCharacters(data);
-  },
-  onError(error) {
-    console.log("error: " + error);
-  },
-});
+const { characters, isLoading, hasError, errorMessage, count } =
+  useCharacters();
 </script>
 
 <template>
-  <h1 v-if="characterStore.characters.isLoading" class="loading">
-    Cargando...
-  </h1>
-  <h2 v-else-if="characterStore.characters.hasError">
-    {{ characterStore.characters.errorMessage }}
+  <h1 v-if="isLoading" class="loading">Cargando...</h1>
+  <h2 v-else-if="hasError">
+    {{ errorMessage }}
   </h2>
   <template v-else>
     <div class="child-wrapper">
       <!-- ! Este prop viene de la URL y se especifican en el router -->
-      <h1>{{ props.title || "no hay props.title" }}</h1>
-      <CardList :characters="characterStore.characters.list" />
+      <h1>{{ props.title || "no hay props.title" }} - ({{ count }})</h1>
+      <CardList :characters="characters" />
     </div>
   </template>
 </template>
