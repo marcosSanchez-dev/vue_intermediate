@@ -1,0 +1,16 @@
+<script setup lang="ts"></script>
+
+<template>
+  <div class="child-wrapper">
+    <h1>CharacterSearch.vue</h1>
+  </div>
+</template>
+
+<style scoped>
+.child-wrapper {
+  background: aqua;
+  padding: 5rem;
+  color: white;
+  min-width: max-content;
+}
+</style>
