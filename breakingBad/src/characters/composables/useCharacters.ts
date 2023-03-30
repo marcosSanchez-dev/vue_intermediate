@@ -1,7 +1,8 @@
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import type { Character, Result } from "@/characters/interfaces/character";
 import breakingBadApi from "@/api/breakingBadApi";
 import { useQuery } from "@tanstack/vue-query";
+import characterStore from "@/store/characters.store";
 
 const characters = ref<Character[]>([]);
 const hasError = ref(false);
@@ -11,8 +12,8 @@ const errorMessage = ref<string | null>(null);
 const getCharacters = async (): Promise<Character[]> => {
   return new Promise((resolve) => {
     setTimeout(async () => {
-      if (characters.value.length > 0) {
-        resolve(characters.value);
+      if (characterStore.characters.list.length > 0) {
+        resolve(characterStore.characters.list);
         return;
       }
       const { data } = await breakingBadApi.get<Result>("/character");
@@ -49,7 +50,7 @@ const useCharacters = () => {
     hasError,
     errorMessage,
     //getters
-    count: characters.value.length,
+    count: computed(() => characters.value.length),
     //methods
   };
 };
