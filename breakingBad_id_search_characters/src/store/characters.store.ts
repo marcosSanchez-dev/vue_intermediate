@@ -57,6 +57,7 @@ const characterStore = reactive<Store>({
   //Metodos  de characters
   async startLoadingCharacters() {
     try {
+      // * Esta peticion siempre se hace al inicar el Store
       const { data } = await breakingBadApi.get<Result>("/character");
       this.loadedCharacters(data.results);
     } catch (error) {
@@ -91,14 +92,19 @@ const characterStore = reactive<Store>({
 
   //Metodos por id
   startLoadingCharacter() {
+    console.log("se comienza a cargar por id");
+    /*
+    Este bloque aun no se usa
     this.ids = {
       ...this.ids,
       isLoading: true,
       hasError: false,
       errorMessage: null,
     };
+    */
   },
   checkIdInStore(id) {
+    // * Usamos !! doble negacion para traer un valor booleano
     return !!this.ids.list[id];
   },
   loadedCharacter(character) {
