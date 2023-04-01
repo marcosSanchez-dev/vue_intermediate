@@ -5,6 +5,7 @@ import { watchEffect } from "vue";
 
 // ! nos da acceso a toda la informacion de la ruta
 const route = useRoute();
+// ! nos da acceso a todal router que creamos
 const router = useRouter();
 
 // me interesa obtener el parametro "ID" que especifique en el router
