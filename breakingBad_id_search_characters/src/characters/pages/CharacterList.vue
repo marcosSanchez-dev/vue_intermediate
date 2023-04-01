@@ -15,7 +15,6 @@ const props = defineProps<{ visible: boolean; title: string }>();
 const getCharactersCache = async (): Promise<Character[]> => {
   return new Promise((resolve) => {
     setTimeout(async () => {
-      // * Primero checas si en el store existen ya characters
       if (characterStore.characters.count > 0) {
         resolve(characterStore.characters.list);
         return;
@@ -30,7 +29,6 @@ const { data, isLoading } = useQuery(["characters"], getCharactersCache, {
   // 1. Lo que resuelva en mi funcion getCharactersCache() es lo que obtendra como parametro la funcion onSuccess()
   // 2. La "data" es de tipo Character[] ya que viene especificado el tipado en la funcion getCharactersCache()
   onSuccess(data) {
-    // Mandas la data al store para llenar el objeto
     characterStore.loadedCharacters(data);
   },
   onError(error) {

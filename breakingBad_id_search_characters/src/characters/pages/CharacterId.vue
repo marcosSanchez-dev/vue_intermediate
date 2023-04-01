@@ -11,6 +11,30 @@ const route = useRoute();
 // me interesa obtener el parametro "ID" que especifique en el router
 // ! el poner " as { id: string } " es lo mismo a " route.params.id "
 const { id } = route.params as { id: string };
+
+const getCharacterCacheFirst = async (
+  characterId: string
+): Promise<Character> => {
+  if (characterStore.checkIdInStore(characterId)) {
+    return characterStore.ids.list[characterId];
+  }
+
+  // ! Al obtener el ID por medio de los "params" hacemos la peticion en el componente de cada character por individual
+  const { data } = await breakingBadApi.get<Character>(
+    `/character/${characterId}`
+  );
+  return data;
+};
+
+const { data: character } = useQuery(
+  ["characters", id],
+  () => getCharacterCacheFirst(id),
+  {
+    onSuccess(character) {
+      characterStore.loadedCharacter(character);
+    },
+  }
+);
 </script>
 
 <template>
