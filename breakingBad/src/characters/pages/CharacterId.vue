@@ -1,46 +1,33 @@
 <script setup lang="ts">
-import { useRoute } from "vue-router";
-import type { Character, Result } from "../interfaces/character";
-import characterStore from "@/store/characters.store";
-import breakingBadApi from "@/api/breakingBadApi";
-import { useQuery } from "@tanstack/vue-query";
+import { useRoute, useRouter } from "vue-router";
+import useCharacter from "../composables/useCharacter";
+import { watchEffect } from "vue";
 
 // ! nos da acceso a toda la informacion de la ruta
 const route = useRoute();
+const router = useRouter();
 
 // me interesa obtener el parametro "ID" que especifique en el router
-// ! el poner " as { id: string } " es lo mismo a " route.params.id "
+//  el poner " as { id: string } " es lo mismo a " route.params.id "
 const { id } = route.params as { id: string };
 
-const getCharacterCacheFirst = async (
-  characterId: string
-): Promise<Character> => {
-  if (characterStore.checkIdInStore(characterId)) {
-    return characterStore.ids.list[characterId];
-  }
+const { list, hasError, errorMessage, character, isLoading } = useCharacter(id);
 
-  // ! Al obtener el ID por medio de los "params" hacemos la peticion en el componente de cada character por individual
-  const { data } = await breakingBadApi.get<Character>(
-    `/character/${characterId}`
-  );
-  return data;
-};
-
-const { data: character } = useQuery(
-  ["characters", id],
-  () => getCharacterCacheFirst(id),
-  {
-    onSuccess(character) {
-      characterStore.loadedCharacter(character);
-    },
+// Esta pendiente de los cambios de todas las propiedades reactivas
+watchEffect(() => {
+  console.log("isLoading: ", isLoading.value);
+  console.log("hasError: ", hasError.value);
+  if (!isLoading.value && hasError.value) {
+    router.replace("/characters");
   }
-);
+});
 </script>
 
 <template>
-  <h1 v-if="!character">Loading...</h1>
+  <h1 v-if="isLoading">Loading...</h1>
+  <h1 v-else-if="hasError">{{ errorMessage }}</h1>
 
-  <div class="child-wrapper" v-else>
+  <div class="child-wrapper" v-else-if="character">
     <h1>CharacterId.vue {{ route.params.id }}</h1>
     <div class="character-container">
       <img :src="character?.image" :alt="character.name" srcset="" />
