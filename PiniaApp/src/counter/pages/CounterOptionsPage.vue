@@ -22,6 +22,8 @@ const { incrementByOne, incrementBy } = counterOptionsStore;
     <button @click="incrementByOne">+1</button>
     <button @click="incrementBy(2)">+2</button>
     <button @click="incrementBy(5)">+5</button>
+
+    <!-- * Las funciones que son nativas de pinia es mejor llamarlas sin destructuracion -->
     <button @click="counterOptionsStore.$reset">reset</button>
   </div>
 
