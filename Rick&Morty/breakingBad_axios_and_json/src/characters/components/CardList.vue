@@ -1,18 +1,17 @@
 <script setup lang="ts">
-import breakingBadApi from "@/api/breakingBadApi";
+import { useQuery } from "@tanstack/vue-query";
 // import { ref } from "vue";
+// import { useCharacters } from "../composables/useCharacters";
+import breakingBadApi from "@/api/breakingBadApi";
 import CharacterCard from "@/characters/components/CharacterCard.vue";
 import type { Character, Result } from "../interfaces/character";
-
-import { useQuery } from "@tanstack/vue-query";
-// import { useCharacters } from "../composables/useCharacters";
 
 // 1- Con suspense
 // const { data } = await breakingBadApi.get<Result[]>("/character");
 // const characters = ref<Character[]>(data.results);
-const stringTest = "soy un composable function";
 
 // 2- Composable function
+// const stringTest = "soy un composable function";
 // const { characters, isLoading, hasError, errorMessage } =
 //   useCharacters(stringTest);
 
@@ -22,6 +21,7 @@ const getCharactersSlow = async (): Promise<Character[]> => {
     setTimeout(async () => {
       const { data } = await breakingBadApi.get<Result>("/character");
       resolve(
+        // con este codigo  ![3, 4, 7] evitamos que esos elementos se integren a la data final
         data.results.filter((personaje) => ![3, 4, 7].includes(personaje.id))
       );
     }, 2000);
@@ -29,6 +29,7 @@ const getCharactersSlow = async (): Promise<Character[]> => {
 };
 
 const {
+  // renombra la data como "characters"
   data: characters,
   isLoading,
   isError,

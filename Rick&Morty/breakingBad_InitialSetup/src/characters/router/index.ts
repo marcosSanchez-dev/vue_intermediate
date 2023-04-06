@@ -5,6 +5,7 @@ import CharacterList from "../pages/CharacterList.vue";
 import CharacterSearch from "../pages/CharacterSearch.vue";
 
 //! Estas rutas afectan al <RouterView /> de CharacterLayout
+//* si creas rutas independientes para importarlas dentro del router usa el tipado RouteRecordRaw
 
 export const characterRoute: RouteRecordRaw = {
   path: "/characters",

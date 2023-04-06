@@ -13,7 +13,6 @@ const getCharacter = async (characterId: string): Promise<Character> => {
   }
 
   try {
-    // ! Al obtener el ID por medio de los "params" hacemos la peticion en el componente de cada character por individual
     const { data } = await breakingBadApi.get<Character>(
       `/character/${characterId}`
     );
@@ -26,8 +25,6 @@ const getCharacter = async (characterId: string): Promise<Character> => {
       throw new Error(`Unexpected error occurred: ${error}`);
     }
   }
-
-  // todo: Manejar error
 };
 
 const loadedCharacter = (character: Character) => {
@@ -45,11 +42,12 @@ const useCharacter = (id: string) => {
   const { isLoading } = useQuery(
     // ! Le estoy pasando un " id " como parte del KEY que requier useQuery para diferenciar los querys o espacio de memoria
     ["characters-", id],
+    // Esta es la funcion que ejecuta la peticion
     // Si la funcion debe recibir un argumento, entonces debe declararse de esta forma
     () => getCharacter(id),
     {
+      // esta es la funcion que se ejecuta en caso de EXITO
       onSuccess: loadedCharacter,
-      //todo: manejar error
 
       onError: loadedWithError,
     }

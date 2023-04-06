@@ -11,6 +11,8 @@ const routeLinks: RouterLinks[] = characterRoute
   .map((children) => {
     return {
       path: children.path,
+
+      // especifico nuevamente el tipado ya que el error  '{ path: string; name: RouteRecordName | undefined; title: string; }[]' indica que name puede ser undefined.
       name: children.name as string,
       title: (children.props as { title: string }).title,
     };

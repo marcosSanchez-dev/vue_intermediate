@@ -34,6 +34,8 @@ const goTo = () => {
   <!-- 
     <div class="character-card">
     <img
+
+      ***** Comment:  Aqui se checa si el array incluye el valor del "character.id"*****
       v-if="[3, 7].includes(character.id)"
       src="https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black-thumbnail.png"
       alt="no image"

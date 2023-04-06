@@ -6,6 +6,7 @@ import type { RouterLinks } from "@/router/link-routes";
 
 const routeLinks: RouterLinks[] = characterRoute
   .children!.filter(
+    // en esta linea especificas que children.props es un objeto y tiene una propiedad "visible" que es un booleano. Luego accedes a la propiedad para validar que sea true su valor
     (children) => (children.props as { visible: boolean }).visible
   )
   .map((children) => {
