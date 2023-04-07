@@ -11,6 +11,7 @@ import IconPinia from "./shared/components/icons/IconPinia.vue";
       <nav>
         <RouterLink to="/">Counter Options API</RouterLink>
         <RouterLink to="/setup">Counter Composition API</RouterLink>
+        <RouterLink to="/clients">Clientes</RouterLink>
       </nav>
     </div>
   </header>
@@ -37,7 +38,7 @@ nav {
 }
 
 nav a.router-link-exact-active {
-  color: red;
+  color: hsla(160, 100%, 37%, 1);
 }
 
 nav a.router-link-exact-active:hover {
