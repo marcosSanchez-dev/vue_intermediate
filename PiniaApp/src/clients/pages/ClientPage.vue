@@ -1,6 +1,6 @@
 <script setup lang="ts"></script>
 <template>
-  <div>Cliente por ID</div>
+  <h2>**** Aqui va la info del cliente por ID ****</h2>
 </template>
 
 <style scoped></style>

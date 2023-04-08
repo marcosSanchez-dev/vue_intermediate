@@ -10,7 +10,11 @@ import IconPinia from "./shared/components/icons/IconPinia.vue";
     <div class="wrapper">
       <nav>
         <RouterLink to="/">Counter Options API</RouterLink>
-        <RouterLink to="/setup">Counter Composition API</RouterLink>
+
+        <!-- * Tambien se puede usar el router-link apuntando hacia el name de la ruta  -->
+        <RouterLink :to="{ name: 'counter-setup' }"
+          >Counter Composition API</RouterLink
+        >
         <RouterLink to="/clients">Clientes</RouterLink>
       </nav>
     </div>
