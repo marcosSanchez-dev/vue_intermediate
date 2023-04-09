@@ -3,7 +3,7 @@ import type { Client } from "@/clients/interfaces/client";
 import { useClientsStore } from "@/store/clients";
 import { useQuery } from "@tanstack/vue-query";
 import { storeToRefs } from "pinia";
-import { watch } from "vue";
+import { computed, watch } from "vue";
 
 const getClients = async (): Promise<Client[]> => {
   const { data } = await clientsApi.get("/clients?_page=1");
@@ -28,7 +28,20 @@ const useClients = () => {
   });
 
   // es lo mismo a decir "clients:clients"
-  return { clients, isLoading };
+  return {
+    clients,
+    isLoading,
+    currentPage,
+    totalPages,
+
+    // * methods
+    getPage: store.setPage,
+
+    // * getters
+    totalPagesArray: computed(() =>
+      [...new Array(totalPages.value)].map((value, index) => index + 1)
+    ),
+  };
 };
 
 export default useClients;
