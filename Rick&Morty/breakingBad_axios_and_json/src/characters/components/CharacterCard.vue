@@ -4,6 +4,7 @@ import type { Character } from "../interfaces/character";
 
 const props = defineProps<{ character: Character }>();
 
+// de esta forma aislo la variable que quiero de los props
 const character = toRef(props, "character");
 </script>
 
