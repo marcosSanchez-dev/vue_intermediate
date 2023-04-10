@@ -1,25 +1,54 @@
 <script setup lang="ts">
-import useClients from "../composables/useClients";
+import { ref, toRef, watch } from "vue";
+// import useClients from "../composables/useClients";
 
-const { getPage, totalPagesArray, currentPage, totalPages } = useClients();
+interface Emits {
+  (evento: "pageChanged", page: number): void;
+}
+
+const props = defineProps<{
+  currentPage: number;
+  totalPages: number;
+}>();
+
+const emits = defineEmits<Emits>();
+
+const currentPage = toRef(props, "currentPage");
+const totalPages = toRef(props, "totalPages");
+// const { getPage } = useClients();
+
+const totalPagesArray = ref<Number[]>([]);
+
+watch(
+  totalPages,
+  () => {
+    totalPagesArray.value = [...new Array(totalPages.value)].map(
+      (value, index) => index + 1
+    );
+  },
+  { immediate: true }
+);
 </script>
 
 <template>
   <div>
-    <button :disabled="currentPage == 1" @click="getPage(currentPage - 1)">
+    <button
+      :disabled="currentPage == 1"
+      @click="emits('pageChanged', currentPage - 1)"
+    >
       Anterior
     </button>
     <button
       v-for="number of totalPagesArray"
       :key="number"
-      @click="getPage(number)"
+      @click="emits('pageChanged', number)"
       :class="{ active: currentPage == number }"
     >
       {{ number }}
     </button>
     <button
       :disabled="currentPage == totalPages"
-      @click="getPage(currentPage + 1)"
+      @click="emits('pageChanged', currentPage + 1)"
     >
       Siguiente
     </button>
