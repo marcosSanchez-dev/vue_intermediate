@@ -17,7 +17,7 @@ const currentPage = toRef(props, "currentPage");
 const totalPages = toRef(props, "totalPages");
 // const { getPage } = useClients();
 
-const totalPagesArray = ref<Number[]>([]);
+const totalPagesArray = ref<number[]>([]);
 
 watch(
   totalPages,
