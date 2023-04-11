@@ -6,7 +6,7 @@ import { storeToRefs } from "pinia";
 import { computed, ref, watch } from "vue";
 
 const getClients = (page: number): Promise<Client[]> => {
-  console.log("Se dispara la request");
+  console.log("Se dispara la request para la lista de clienteS");
   return new Promise((resolve) => {
     setTimeout(async () => {
       const { data } = await clientsApi.get(`/clients?_page=${page}`);
