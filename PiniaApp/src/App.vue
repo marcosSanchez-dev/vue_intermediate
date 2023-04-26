@@ -16,6 +16,7 @@ import IconPinia from "./shared/icons/IconPinia.vue";
           >Counter Composition API</RouterLink
         >
         <RouterLink to="/clients">Clientes</RouterLink>
+        <!-- <RouterLink to="/test" >Three JS</RouterLink> -->
       </nav>
     </div>
   </header>

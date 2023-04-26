@@ -33,11 +33,17 @@ const useClients = () => {
     }
   );
 
-  watch(data, (clientes, oldValue) => {
-    if (clientes) {
-      store.setClients(clientes);
+  watch(
+    data,
+    (clientes, oldValue) => {
+      if (clientes) {
+        store.setClients(clientes);
+      }
+    },
+    {
+      immediate: true,
     }
-  });
+  );
 
   // es lo mismo a decir "clients:clients"
   return {

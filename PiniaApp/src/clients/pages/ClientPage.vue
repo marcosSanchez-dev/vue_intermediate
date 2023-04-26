@@ -2,26 +2,98 @@
 import LoadingModal from "@/shared/components/LoadingModal.vue";
 import useClient from "@/clients/composables/useClient";
 import { useRoute } from "vue-router";
+import { useMutation, useQueryClient } from "@tanstack/vue-query";
+import type { Client } from "../interfaces/client";
+import clientsApi from "@/api/clients-api";
+import { watch } from "vue";
 
 const route = useRoute();
+const queryClient = useQueryClient();
 
 const { client, isLoading } = useClient(+route.params.id);
+
+// * "cliente" es la data que voy a mandar para actualizar la data
+const updateClientPatch = async (cliente: Client): Promise<Client> => {
+  console.log("Se disparo el metodo patch para actualizar clientes");
+  return new Promise((resolve) => {
+    setTimeout(async () => {
+      const { data } = await clientsApi.patch<Client>(
+        `/clients/${cliente.id}`,
+        cliente
+      );
+
+      // const queries = queryClient.getQueryCache().clear();
+      const queries = queryClient
+        .getQueryCache()
+        .findAll(["clients?page="], { exact: false });
+      console.log("queries: ", queries);
+
+      // Ejemplo de como resetar queries
+      // queries.forEach((query) => query.reset());
+
+      queries.forEach((query) => query.fetch());
+
+      // console.log(data);
+      resolve(data);
+    }, 2000);
+  });
+};
+
+const {
+  mutate,
+  isLoading: mutationIsLoading,
+  isSuccess,
+  reset,
+  status,
+} = useMutation(updateClientPatch, {
+  // * La "data" que le paso como parametro, la mando desde el  "resolve(data)"
+  onSuccess(data) {
+    // console.log("data: ", data);
+  },
+});
+
+watch(
+  isSuccess,
+  () => {
+    setTimeout(() => {
+      // ! Inicializa la variable isSuccess, isLoading, status, etc...
+      reset();
+    }, 2000);
+  },
+  {
+    immediate: true,
+  }
+);
 </script>
 <template>
   <h2>ClientPage.vue</h2>
-  <h3>Guardando...</h3>
-  <h3>Guardado</h3>
+  <h1>isSuccess: {{ isSuccess }}</h1>
+  <h1>isLoading: {{ mutationIsLoading }}</h1>
+  <h1>status: {{ status }}</h1>
+  <h3 v-if="mutationIsLoading"><b> Guardando... </b></h3>
+  <h3 v-if="isSuccess"><b> Guardado :) </b></h3>
 
-  <LoadingModal v-if="isLoading" />
+  <LoadingModal v-if="isLoading || mutationIsLoading" />
 
-  <div>
-    <h1>Nombre</h1>
-    <form action="">
-      <input type="text" placeholder="Nombre del cliente" />
+  <div v-if="client">
+    <h1>{{ client.name }}</h1>
+
+    <!-- ! "mutate() llama a la funcion que se le paso como parametro a "useMutation" -->
+    <form @submit.prevent="mutate(client!)">
+      <!-- ! el v-model tendrá efecto solo si "client" es una variable reactiva y con el permiso de ser editada y no solo "read only", por eso se rompe la referencia en el composable usando spread operator -->
+      <input
+        type="text"
+        placeholder="Nombre del cliente"
+        v-model="client.name"
+      />
       <br />
-      <input type="text" placeholder="Direccion del cliente" />
+      <input
+        type="text"
+        placeholder="Direccion del cliente"
+        v-model="client.address"
+      />
       <br />
-      <button type="submit">Guardar</button>
+      <button type="submit" :disabled="mutationIsLoading">Guardar</button>
     </form>
   </div>
 
