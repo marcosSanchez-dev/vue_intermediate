@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import LoadingModal from "@/shared/components/LoadingModal.vue";
 import useClient from "@/clients/composables/useClient";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useMutation, useQueryClient } from "@tanstack/vue-query";
 import type { Client } from "../interfaces/client";
 import clientsApi from "@/api/clients-api";
 import { watch } from "vue";
 
 const route = useRoute();
+const router = useRouter();
 const queryClient = useQueryClient();
 
-const { client, isLoading } = useClient(+route.params.id);
+const { client, isLoading, isError } = useClient(+route.params.id);
 
 // * "cliente" es la data que voy a mandar para actualizar la data
 const updateClientPatch = async (cliente: Client): Promise<Client> => {
@@ -22,7 +23,7 @@ const updateClientPatch = async (cliente: Client): Promise<Client> => {
         cliente
       );
 
-      // const queries = queryClient.getQueryCache().clear();
+      // ! con queryClient tengo acceso a la instancia QueryCache que es donde se almacenan los resultado de los query.
       const queries = queryClient
         .getQueryCache()
         .findAll(["clients?page="], { exact: false });
@@ -31,6 +32,7 @@ const updateClientPatch = async (cliente: Client): Promise<Client> => {
       // Ejemplo de como resetar queries
       // queries.forEach((query) => query.reset());
 
+      // con el siguiente bloque pido hacer un refetch a la query con nombre "clients?page=" despues de haber ejecutado el metodo PATCH
       queries.forEach((query) => query.fetch());
 
       // console.log(data);
@@ -64,11 +66,26 @@ watch(
     immediate: true,
   }
 );
+
+console.log("isError: ", isError.value);
+watch(
+  isError,
+  () => {
+    if (isError.value) {
+      console.log("hay error con el useQuery!");
+
+      // ! replace te redirecciona a nueva pantalla sin guardar en el historial el link anterior
+      router.replace("/clients");
+    }
+  },
+  { immediate: true }
+);
 </script>
 <template>
   <h2>ClientPage.vue</h2>
   <h1>isSuccess: {{ isSuccess }}</h1>
-  <h1>isLoading: {{ mutationIsLoading }}</h1>
+  <h1>mutationIsLoading: {{ mutationIsLoading }}</h1>
+  <h1>isError: {{ isError }}</h1>
   <h1>status: {{ status }}</h1>
   <h3 v-if="mutationIsLoading"><b> Guardando... </b></h3>
   <h3 v-if="isSuccess"><b> Guardado :) </b></h3>
