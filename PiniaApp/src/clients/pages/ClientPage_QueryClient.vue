@@ -2,22 +2,57 @@
 import LoadingModal from "@/shared/components/LoadingModal.vue";
 import useClient from "@/clients/composables/useClient";
 import { useRoute, useRouter } from "vue-router";
+import { useMutation, useQueryClient } from "@tanstack/vue-query";
+import type { Client } from "../interfaces/client";
+import clientsApi from "@/api/clients-api";
 import { watch } from "vue";
 
 const route = useRoute();
 const router = useRouter();
+const queryClient = useQueryClient();
+
+const { client, isLoading, isError } = useClient(+route.params.id);
+
+// * "cliente" es la data que voy a mandar para actualizar la data
+const updateClientPatch = async (cliente: Client): Promise<Client> => {
+  console.log("Se disparo el metodo patch para actualizar clientes");
+  return new Promise((resolve) => {
+    setTimeout(async () => {
+      const { data } = await clientsApi.patch<Client>(
+        `/clients/${cliente.id}`,
+        cliente
+      );
+
+      // ! con queryClient tengo acceso a la instancia QueryCache que es donde se almacenan los resultado de los query.
+      const queries = queryClient
+        .getQueryCache()
+        .findAll(["clients?page="], { exact: false });
+      console.log("queries: ", queries);
+
+      // Ejemplo de como resetar queries
+      // queries.forEach((query) => query.reset());
+
+      // con el siguiente bloque pido hacer un refetch a la query con nombre "clients?page=" despues de haber ejecutado el metodo PATCH
+      queries.forEach((query) => query.fetch());
+
+      // console.log(data);
+      resolve(data);
+    }, 2000);
+  });
+};
 
 const {
-  client,
-  isLoading,
-  isError,
-  updateClientPatch,
-  isSuccess,
   mutate,
-  mutationIsLoading,
+  isLoading: mutationIsLoading,
+  isSuccess,
   reset,
   status,
-} = useClient(+route.params.id);
+} = useMutation(updateClientPatch, {
+  // * La "data" que le paso como parametro, la mando desde el  "resolve(data)"
+  onSuccess(data) {
+    // console.log("data: ", data);
+  },
+});
 
 watch(
   isSuccess,
@@ -32,6 +67,7 @@ watch(
   }
 );
 
+console.log("isError: ", isError.value);
 watch(
   isError,
   () => {
@@ -49,7 +85,6 @@ watch(
   <h2>ClientPage.vue</h2>
   <h1>isSuccess: {{ isSuccess }}</h1>
   <h1>mutationIsLoading: {{ mutationIsLoading }}</h1>
-  <h1>mutationIsUpdating: {{ mutationIsUpdating }}</h1>
   <h1>isError: {{ isError }}</h1>
   <h1>status: {{ status }}</h1>
   <h3 v-if="mutationIsLoading"><b> Guardando... </b></h3>
