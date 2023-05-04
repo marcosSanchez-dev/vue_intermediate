@@ -1,13 +1,17 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { env } from 'process';
+import { useIssuesStore } from '../../../stores/issues';
 
-const model = ref('');
+const issuesStore = useIssuesStore();
+
+// ! como acceder a las env variables
+// console.log('process.env: ', process.env);
 </script>
 
 <template>
   <div>
     <q-btn-toggle
-      v-model="model"
+      v-model="issuesStore.state"
       push
       spread
       glossy

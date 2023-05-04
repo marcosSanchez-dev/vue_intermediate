@@ -26,7 +26,7 @@ const { id = '' } = route.params;
 
   <div class="column">
     <span class="text-h3 q-mb-md">comments (5)</span>
-    <IssueCard v-for="comments in 10" :key="comments" />
+    <IssueCard v-for="comments in 3" :key="comments" />
   </div>
 </template>
 
